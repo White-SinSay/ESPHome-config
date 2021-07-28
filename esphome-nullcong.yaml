@@ -1,5 +1,5 @@
 substitutions:
-  plug_name: d1-mini-test
+  plug_name: d1_mini_test
 esphome:
   name: ${plug_name}
   platform: ESP8266
