@@ -1,0 +1,4 @@
+port: 80
+auth:
+  username: admin
+  password: webpass

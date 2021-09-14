@@ -1,0 +1,4 @@
+platform: wifi_info
+ip_address:
+  name: "${plug_name} ip_address"
+  icon: "mdi:ip"
