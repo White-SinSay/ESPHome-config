@@ -1,5 +1,5 @@
 substitutions:
-  plug_name: esp12f-pc5
+  plug_name: esp12f-power-pc
   use_address: 192.168.90.137
 
 esphome:
@@ -7,6 +7,9 @@ esphome:
   platform: ESP8266
   board: esp12e
   comment: power PC5
+  project:
+    name: "WDi.PowerPC"
+    version: "20210914-0"
 
 wifi:
   !include common/wifi.config.yaml
