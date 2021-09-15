@@ -28,6 +28,7 @@ dallas:
 
 binary_sensor:
   - platform: gpio
+    id: pwled
     pin:
      number: GPIO14
      mode: INPUT
@@ -47,7 +48,9 @@ sensor:
 
 switch:
   - <<: !include common/switch/restart.config.yaml 
-
+  - <<: !include common/switch/power.config.yaml 
+  - <<: !include common/switch/power_hold.config.yaml
+  
   - platform: gpio
     name: "${plug_name} power button"
     internal: true    
@@ -56,23 +59,7 @@ switch:
       number: GPIO12
       inverted: false
 
-  - platform: template    
-    name: "${plug_name} power"
-    id: power
-    icon: "mdi:power"
-    turn_on_action:
-    - switch.turn_on: pbut
-    - delay: 500ms
-    - switch.turn_off: pbut
 
-  - platform: template    
-    name: "${plug_name} power 5s"
-    id: power5s
-    icon: "mdi:power-settings"
-    turn_on_action:
-    - switch.turn_on: pbut
-    - delay: 3s
-    - switch.turn_off: pbut
 
 text_sensor:
   - <<: !include common/text_sensor/online.config.yaml
