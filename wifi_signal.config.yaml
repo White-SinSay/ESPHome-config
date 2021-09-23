@@ -1,3 +1,0 @@
-platform: wifi_signal
-name: "${plug_name} WiFi"
-update_interval: 60s
