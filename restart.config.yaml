@@ -1,2 +1,0 @@
-platform: restart
-name: "${plug_name} restart"
