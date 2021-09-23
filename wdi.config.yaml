@@ -21,7 +21,7 @@ text_sensor:
     name: "${plug_name} Version"
     hide_timestamp: True
 
-  - platform: wifi_info
-    ip_address:
-      name: "${plug_name} ip_address"
-      icon: "mdi:ip"
+ # - platform: wifi_info
+ #   ip_address:
+ #     name: "${plug_name} ip_address"
+ #     icon: "mdi:ip"
