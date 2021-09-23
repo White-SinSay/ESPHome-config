@@ -1,3 +1,0 @@
-platform: version
-name: "${plug_name} Version"
-hide_timestamp: True
