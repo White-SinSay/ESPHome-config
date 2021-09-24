@@ -1,3 +1,18 @@
+switch:
+  - platform: restart
+    name: "${plug_name} restart"
+
+sensor:
+  - platform: uptime
+    id: device_uptime
+    internal: true
+
+  - platform: wifi_signal
+    name: "${plug_name} WiFi"
+    update_interval: 60s
+
+
+
 text_sensor:
   - platform: template
     name: "${plug_name} online"
