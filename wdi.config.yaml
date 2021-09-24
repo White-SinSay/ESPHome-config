@@ -7,6 +7,30 @@ sensor:
 #    id: device_uptime
 #    internal: true
 
+  - platform: uptime
+    name: Uptime Sensor
+    internal: true
+    id: device_uptime
+    update_interval: 15s
+    on_raw_value:
+      then:
+        - text_sensor.template.publish:
+            id: uptime_human
+            state: !lambda |-
+              int seconds = round(id(device_uptime).raw_state);
+              int days = seconds / (24 * 3600);
+              seconds = seconds % (24 * 3600);
+              int hours = seconds / 3600;
+              seconds = seconds % 3600;
+              int minutes = seconds /  60;
+              seconds = seconds % 60;
+              return (
+                (days ? String(days) + "d " : "") +
+                (hours ? String(hours) + "h " : "") +
+                (minutes ? String(minutes) + "m " : "") +
+                (String(seconds) + "s")
+              ).c_str();    
+
   - platform: wifi_signal
     name: "${plug_name} WiFi"
     update_interval: 60s
@@ -18,20 +42,7 @@ text_sensor:
 
   - platform: template
     name: "${plug_name} online"
-    lambda: |-
-      uint32_t uptime = (id(device_uptime).state);
-      int minutes = (uptime % 3600) / 60;
-      int hours = (uptime % 86400) / 3600;
-      int days = uptime / 86400;
-      if (days > 0) {
-        return { (String(days) + " д." + String(hours) + " ч." + String(minutes) + " мин.").c_str() };
-      }
-      if (hours > 0) {
-        return { (String(hours) + " ч. " + String(minutes) + " мин.").c_str() };
-      } else {
-        return { (String(minutes) + " мин.").c_str() };
-      }
-    update_interval: 60s
+    id: uptime_human
     icon: mdi:clock-start
 
   - platform: wifi_info
