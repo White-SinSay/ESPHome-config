@@ -1,4 +1,7 @@
 
+status_led:
+  pin: GPIO2
+
 binary_sensor:
   - platform: gpio
     id: pwled
