@@ -11,7 +11,7 @@ sensor:
     name: Uptime Sensor
     internal: true
     id: device_uptime
-    update_interval: 15s
+    update_interval: 60s
     on_raw_value:
       then:
         - text_sensor.template.publish:
