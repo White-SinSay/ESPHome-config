@@ -1,1 +1,36 @@
 
+  - platform: template
+    name: "${plug_name} power"
+    icon: "mdi:power"
+    lambda: |-
+      if (id(pwled).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - switch.turn_on: pbut
+      - delay: 1500ms
+      - switch.turn_off: pbut
+    turn_off_action:
+      - switch.turn_on: pbut
+      - delay: 1500ms
+      - switch.turn_off: pbut
+
+  - platform: template
+    name: "${plug_name} power hold"
+    icon: "mdi:power-settings"
+    lambda: |-
+      if (id(pwled).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - switch.turn_on: pbut
+      - delay: 5s
+      - switch.turn_off: pbut
+    turn_off_action:
+      - switch.turn_on: pbut
+      - delay: 5s
+      - switch.turn_off: pbut 
