@@ -3,9 +3,9 @@ switch:
     name: "${plug_name} restart"
 
 sensor:
-  - platform: uptime
-    id: device_uptime
-    internal: true
+#  - platform: uptime
+#    id: device_uptime
+#    internal: true
 
   - platform: wifi_signal
     name: "${plug_name} WiFi"
