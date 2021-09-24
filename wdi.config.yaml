@@ -11,9 +11,11 @@ sensor:
     name: "${plug_name} WiFi"
     update_interval: 60s
 
-
-
 text_sensor:
+  - platform: version
+    name: "${plug_name} Version"
+    hide_timestamp: True
+
   - platform: template
     name: "${plug_name} online"
     lambda: |-
@@ -31,10 +33,6 @@ text_sensor:
       }
     update_interval: 60s
     icon: mdi:clock-start
-
-  - platform: version
-    name: "${plug_name} Version"
-    hide_timestamp: True
 
   - platform: wifi_info
     ip_address:
