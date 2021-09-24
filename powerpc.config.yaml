@@ -1,4 +1,17 @@
 
+binary_sensor:
+  - platform: gpio
+    id: pwled
+    pin:
+     number: GPIO14
+     mode: INPUT
+     inverted: no
+    name: "${plug_name} power led"
+    filters:
+      - delayed_on: 1s
+      - delayed_off: 1s
+
+switch: 
   - platform: template
     name: "${plug_name} power"
     icon: "mdi:power"
