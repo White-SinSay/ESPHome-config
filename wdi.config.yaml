@@ -25,10 +25,10 @@ sensor:
               int minutes = seconds /  60;
               seconds = seconds % 60;
               return (
-                (days ? String(days) + "д " : "") +
-                (hours ? String(hours) + "ч " : "") +
-                (minutes ? String(minutes) + "м " : "") +
-                (String(seconds) + "с")
+                (days ? String(days) + "д. " : "") +
+                (hours ? String(hours) + "ч. " : "") +
+                (minutes ? String(minutes) + "м. " : "") +
+                (String(seconds) + "с.")
               ).c_str();    
 
   - platform: wifi_signal
