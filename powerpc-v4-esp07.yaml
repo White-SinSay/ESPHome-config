@@ -1,0 +1,181 @@
+substitutions:
+  plug_name: powerpc-v4-esp07
+  use_address: 192.168.90.27
+  wol_mac: E9:48:B8:CA:58:A1
+
+esphome:
+  name: ${plug_name}
+  platform: ESP8266
+  board: esp01_1m
+  comment: powerPC-v4
+  project:
+    name: "WDi.PowerPC"
+    version: "20220531-1"
+wifi:
+  networks:
+  - ssid: !secret ap_ssid
+    password: !secret ap_password
+    priority: 1.0
+  - ssid: !secret ap_office_ssid
+    password: !secret ap_office_password
+    priority: 2.0
+  ap:
+    ssid: "${plug_name} Hotspot"
+    password: "J4buzjhCMSA2"
+  use_address: ${use_address}
+
+web_server:
+  port: 80
+  auth:
+    username: powerpc
+    password: powerpc
+
+captive_portal:
+logger:
+ota:
+  password: !secret ota
+api:
+  password: !secret api
+status_led:
+  pin: GPIO2
+dallas:
+  - pin: GPIO13
+    update_interval: 60s
+
+i2c:
+  sda: GPIO4
+  scl: GPIO5
+  scan: true
+  id: bus_a
+
+light:
+  - platform: neopixelbus
+    type: GRB
+    variant: WS2812
+    pin: GPIO2
+    num_leds: 60
+    name: "${plug_name} NeoPixel Light"
+
+binary_sensor:
+  - platform: gpio
+    id: pwled
+    pin:
+     number: GPIO14
+     mode: INPUT
+     inverted: no
+    name: "${plug_name} power led"
+    icon: mdi:led-outline
+    filters:
+      - delayed_on: 1s
+      - delayed_off: 1s
+
+  - platform: gpio
+    device_class: opening
+    pin:
+      number: GPIO12
+      mode: INPUT
+      inverted: False
+    name: "${plug_name} case"
+
+sensor:
+  - platform: uptime
+    id: device_uptime
+    internal: true
+  - platform: wifi_signal
+    name: "${plug_name} WiFi"
+    update_interval: 60s
+
+  - platform: dallas
+    address: 0xb10316b5ea4fff28
+    name: "${plug_name} Temperature"
+
+  - platform: adc
+    pin: A0
+    name: "${plug_name} 12v"
+    update_interval: 60s
+    filters:
+      - multiply: 15.2
+
+switch:
+  - platform: restart
+    name: "${plug_name} restart"
+
+  - platform: gpio
+    name: "${plug_name} power button"
+    #    icon: mdi:wall-sconce-flat
+    internal: true    
+    id: pbut
+    pin:
+      number: GPIO15
+      inverted: false
+    #      mode: INPUT_PULLDOWN
+
+  - platform: template
+    name: "${plug_name} power"
+    icon: "mdi:power"
+    lambda: |-
+      if (id(pwled).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - switch.turn_on: pbut
+      - delay: 1500ms
+      - switch.turn_off: pbut
+    turn_off_action:
+      - switch.turn_on: pbut
+      - delay: 1500ms
+      - switch.turn_off: pbut
+
+
+  - platform: template
+    name: "${plug_name} power hold"
+    icon: "mdi:power-settings"
+    lambda: |-
+      if (id(pwled).state) {
+        return true;
+      } else {
+        return false;
+      }
+    turn_on_action:
+      - switch.turn_on: pbut
+      - delay: 5s
+      - switch.turn_off: pbut
+    turn_off_action:
+      - switch.turn_on: pbut
+      - delay: 5s
+      - switch.turn_off: pbut
+
+button:
+  - platform: wake_on_lan
+    name: "${plug_name} WoL"
+    target_mac_address: "${wol_mac}"
+
+text_sensor:
+  - platform: template
+    name: "${plug_name} online"
+    lambda: |-
+      uint32_t uptime = (id(device_uptime).state);
+      int minutes = (uptime % 3600) / 60;
+      int hours = (uptime % 86400) / 3600;
+      int days = uptime / 86400;
+      if (days > 0) {
+        return { (String(days) + " д." + String(hours) + " ч." + String(minutes) + " мин.").c_str() };
+      }
+      if (hours > 0) {
+        return { (String(hours) + " ч. " + String(minutes) + " мин.").c_str() };
+      } else {
+        return { (String(minutes) + " мин.").c_str() };
+      }
+    update_interval: 60s
+    icon: mdi:clock-start
+
+  - platform: version
+    name: "${plug_name} Version"
+    hide_timestamp: True
+
+  - platform: wifi_info
+    ip_address:
+      name: "${plug_name} ip_address"
+      icon: "mdi:ip"
